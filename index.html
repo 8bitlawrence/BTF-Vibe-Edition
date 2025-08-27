@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTF &middot; Vibe Edition</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="btflogo.png" type="image/x-icon">
+    <style>
+    /* Rainbow shimmer for chromatic rarity */
+    .rarity-chromatic {
+      background: linear-gradient(90deg, #ff5ec7, #ffe680, #5efcff, #ff5ec7 60%);
+      background-size: 300% 100%;
+      animation: chromatic-shimmer 2s linear infinite;
+      color: #fff;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-weight: bold;
+      text-shadow: 0 1px 4px #0008;
+    }
+    @keyframes chromatic-shimmer {
+      0% { background-position: 0% 0; }
+      100% { background-position: 100% 0; }
+    }
+        #user-info {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            padding: 6px 16px;
+            min-width: 80px;
+            min-height: 36px;
+        }
+        header {
+            margin-bottom: 32px;
+        }
+        .title-bg {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            padding: 10px 32px;
+            display: inline-block;
+            margin-bottom: 8px;
+            margin-top: 0;
+        }
+        #coins-bar {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            padding: 6px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 18px;
+            margin-left: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        #nav-tabs {
+            margin-top: 18px;
+            margin-bottom: 24px;
+        }
+        main {
+            margin-top: 12px;
+        }
+        .farm {
+            margin-bottom: 16px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+        }
+        /* Shimmer animation for max level farms */
+        .shimmer {
+            background: linear-gradient(90deg, #f8f8f8 0%, #fffbe6 40%, #ffe680 50%, #fffbe6 60%, #f8f8f8 100%);
+            background-size: 200% 100%;
+            animation: shimmer-move 1.5s infinite linear;
+            box-shadow: 0 0 12px 2px #ffe68080;
+        }
+        @keyframes shimmer-move {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+  <div id="admin-panel" style="display:none;position:fixed;left:24px;top:100px;z-index:1000;background:#fff;border-radius:12px;box-shadow:0 2px 12px #0002;padding:18px 20px;align-items:center;gap:12px;">
+    <b style="color:#7d4afc;font-size:1.1em;">Admin Mode</b><br>
+    <button id="admin-coins-btn" style="margin-top:8px;font-size:1em;padding:6px 18px;">Give 1 Mil Coins</button>
+  </div>
+  <div id="game-container">
+        <!-- User Info -->
+        <div id="user-info" style="position:absolute;top:16px;right:24px;display:none;align-items:center;gap:8px;z-index:10;">
+            <span id="user-icon" style="font-size:1.5em;">👤</span>
+            <span id="username-label" style="font-weight:bold;"></span>
+        </div>
+        <header>
+            <div class="title-bg">
+                <h1 class="silkscreen-header" style="margin:0;"> BTF &middot; Vibe Edition</h1>
+            </div>
+            <div id="coins-bar">
+                <span id="coins">Coins: 0</span>
+                <span id="produce">Produce: 0</span>
+                <span id="ep" style="color:#7d4afc;">Enchantment Points: 0</span>
+            </div>
+            <div id="nav-tabs">
+                <button id="tab-farms" class="tab-btn active">Farms</button>
+                <button id="tab-shop" class="tab-btn">Shop</button>
+                <button id="tab-inventory" class="tab-btn">Inventory</button>
+                <button id="tab-enchantments" class="tab-btn">Enchantments</button>
+                <button id="tab-settings" class="tab-btn">Settings</button>
+            </div>
+        </header>
+        <main>
+            <section id="farms-section">
+                <h2>Your Farms</h2>
+                <div id="farms-list"></div>
+                <button id="buy-farm">Buy New Farm</button>
+            </section>
+            <section id="shop-section" style="display:none;">
+                <h2>Shop</h2>
+                <div id="shop-ui"></div>
+            </section>
+            <section id="inventory-section" style="display:none;">
+                <h2>Your Inventory</h2>
+                <div id="inventory-ui"></div>
+            </section>
+            <section id="enchantments-section" style="display:none;">
+                <h2>Enchantments</h2>
+                <div id="enchantments-ui"></div>
+            </section>
+            <section id="settings-section" style="display:none;">
+                <h2>Settings</h2>
+                <div id="settings-ui"></div>
+            </section>
+        </main>
+        <div id="sale-popup-stack" class="sale-popup-stack"></div>
+        <footer>
+            <small>An Eightbit Game | made 2025</small>
+            <small>by the cookiemonster</small>
+            <br> <small>v1.0.5</small>
+        </footer>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>

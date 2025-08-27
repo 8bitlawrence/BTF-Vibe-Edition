@@ -1,0 +1,415 @@
+/* Sale popup styles */
+/* Sale popup stacking and animation */
+.sale-popup-stack {
+	position: fixed;
+	left: 50%;
+	bottom: 32px;
+	transform: translateX(-50%);
+	z-index: 1000;
+	display: flex;
+	flex-direction: column-reverse;
+	gap: 12px;
+	pointer-events: none;
+	align-items: center;
+	min-width: 320px;
+	max-width: 90vw;
+	transition: gap 0.3s cubic-bezier(.5,1.8,.5,1), bottom 0.3s cubic-bezier(.5,1.8,.5,1);
+}
+.sale-popup-stack > .sale-popup {
+	transition: transform 0.35s cubic-bezier(.5,1.8,.5,1), opacity 0.3s;
+	will-change: transform, opacity;
+}
+.sale-popup {
+	background: #fff;
+	color: #222;
+	border-radius: 10px;
+	box-shadow: 0 4px 24px rgba(87,183,217,0.18), 0 2px 8px rgba(0,0,0,0.09);
+	padding: 18px 32px;
+	font-size: 1.15em;
+	font-weight: 600;
+	opacity: 0;
+	pointer-events: auto;
+	min-width: 260px;
+	max-width: 100%;
+	margin: 0 auto;
+	animation: popup-in 0.35s cubic-bezier(.5,1.8,.5,1) forwards;
+	transition: opacity 0.3s;
+}
+.sale-popup.show {
+	opacity: 1;
+}
+.sale-popup.hide {
+	animation: popup-out 0.3s cubic-bezier(.5,1.8,.5,1) forwards;
+}
+@keyframes popup-in {
+	0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+	80% { opacity: 1; transform: translateY(-6px) scale(1.04); }
+	100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes popup-out {
+	0% { opacity: 1; transform: translateY(0) scale(1); }
+	100% { opacity: 0; transform: translateY(40px) scale(0.95); }
+}
+#game-container {
+	/* ...existing code... */
+	background: #23272f;
+	border: 2px solid #e0e0e0;
+	box-shadow: 0 10px 40px rgba(0,0,0,0.13);
+	padding: 36px 28px 20px 28px;
+}
+
+.farm-header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 6px;
+}
+.farm-emoji {
+	font-size: 2em;
+	filter: drop-shadow(0 2px 2px #b2f0ff);
+}
+.farm-title {
+	font-size: 1.2em;
+	letter-spacing: 0.5px;
+}
+.farm-stats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px 24px;
+	margin-bottom: 8px;
+	font-size: 1.05em;
+}
+.farm-actions {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 8px;
+}
+.farm-crops {
+	display: flex;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+.crop-btn {
+	background: #e0ffe0;
+	color: #333;
+	border: 1.5px solid #b2f0ff;
+	border-radius: 6px;
+	padding: 6px 14px;
+	font-size: 1em;
+	font-weight: 500;
+	transition: background 0.2s, border 0.2s, color 0.2s;
+	margin-top: 0;
+}
+.crop-btn:disabled {
+	background: #b2f0ff;
+	color: #888;
+	border: 1.5px solid #7ed957;
+}
+.crop-emoji {
+	font-size: 1.2em;
+}
+.farm-card {
+	border-left: 6px solid #7ed957;
+	box-shadow: 0 2px 12px rgba(126,217,87,0.08), 0 1.5px 6px rgba(0,0,0,0.04);
+	margin-bottom: 8px;
+	transition: box-shadow 0.2s, border 0.2s;
+	position: relative;
+	overflow: hidden;
+}
+.farm-card:hover {
+	box-shadow: 0 4px 24px rgba(87,183,217,0.13), 0 2px 8px rgba(0,0,0,0.07);
+	border-left: 6px solid #57b7d9;
+}
+.upgrade-card {
+	border-left: 6px solid #57b7d9;
+	box-shadow: 0 2px 12px rgba(87,183,217,0.08), 0 1.5px 6px rgba(0,0,0,0.04);
+	margin-bottom: 8px;
+	transition: box-shadow 0.2s, border 0.2s;
+	position: relative;
+	overflow: hidden;
+}
+.upgrade-card:hover {
+	box-shadow: 0 4px 24px rgba(126,217,87,0.13), 0 2px 8px rgba(0,0,0,0.07);
+	border-left: 6px solid #7ed957;
+}
+#resources {
+	background: #e0ffe0;
+	border: 1.5px solid #b2f0ff;
+	box-shadow: 0 1px 6px rgba(87,183,217,0.08);
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: #333;
+}
+button {
+	/* ...existing code... */
+	box-shadow: 0 1px 4px rgba(87,183,217,0.08);
+}
+button:focus {
+	outline: 2px solid #57b7d9;
+	outline-offset: 2px;
+}
+footer {
+	background: #f3f3f3;
+	border-radius: 8px;
+	padding: 8px 0 0 0;
+	margin-top: 32px;
+	box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.anim-bounce {
+	animation: bounce 0.4s;
+}
+@keyframes bounce {
+	0% { transform: scale(1); }
+	30% { transform: scale(1.12, 0.92); }
+	50% { transform: scale(0.95, 1.08); }
+	70% { transform: scale(1.05, 0.98); }
+	100% { transform: scale(1); }
+}
+
+.anim-upgrade {
+	animation: upgradeGlow 0.6s;
+}
+@keyframes upgradeGlow {
+	0% { box-shadow: 0 0 0px 0px #ffd700; }
+	50% { box-shadow: 0 0 16px 8px #ffd700; }
+	100% { box-shadow: 0 0 0px 0px #ffd700; }
+}
+
+.anim-crop {
+	animation: cropChange 0.5s;
+}
+@keyframes cropChange {
+	0% { background: #e0ffe0; }
+	50% { background: #b2f0ff; }
+	100% { background: #fff; }
+}
+
+.anim-pop {
+	animation: pop 0.3s;
+}
+@keyframes pop {
+	0% { transform: scale(1); }
+	50% { transform: scale(1.18); }
+	100% { transform: scale(1); }
+}
+body {
+	background: #23272f;
+	font-family: 'Segoe UI', Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+}
+
+#game-container {
+	max-width: 900px;
+	margin: 40px auto;
+	background: #fff;
+	border-radius: 18px;
+	box-shadow: 0 6px 32px rgba(0,0,0,0.12);
+	padding: 32px 24px 16px 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+}
+
+#resources {
+	display: flex;
+	gap: 32px;
+	font-size: 1.2rem;
+	background: #f3f3f3;
+	border-radius: 8px;
+	padding: 8px 24px;
+	margin-top: 8px;
+}
+
+main {
+	display: flex;
+	gap: 32px;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+section {
+	flex: 1 1 350px;
+	background: #f9f9f9;
+	border-radius: 12px;
+	padding: 18px 16px;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+	min-width: 300px;
+}
+
+h1, h2 {
+	margin: 0 0 12px 0;
+	font-weight: 700;
+}
+
+#farms-list, #upgrades-list {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	margin-bottom: 16px;
+}
+
+.farm-card, .upgrade-card {
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+	padding: 12px 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	border-left: 4px solid #7ed957;
+}
+
+.upgrade-card {
+	border-left: 4px solid #57b7d9;
+}
+
+button, .crop-btn, .enchant-btn {
+  background: #4f8cff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: 8px;
+  box-shadow: 0 1px 4px rgba(87,183,217,0.08);
+}
+button:disabled, .crop-btn:disabled, .enchant-btn:disabled {
+  background: #e0e0e0;
+  color: #888;
+  cursor: not-allowed;
+}
+button:active, .crop-btn:active, .enchant-btn:active {
+  transform: scale(0.97);
+}
+
+footer {
+	text-align: center;
+	color: #888;
+	margin-top: 24px;
+	font-size: 0.95rem;
+}
+
+/* Farm Modal Styles */
+.farm-modal-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.25);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.farm-modal {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(87,183,217,0.18), 0 2px 8px rgba(0,0,0,0.09);
+  padding: 32px 28px 24px 28px;
+  min-width: 320px;
+  max-width: 95vw;
+  min-height: 220px;
+  position: relative;
+  animation: popup-in 0.3s cubic-bezier(.5,1.8,.5,1);
+}
+.farm-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.farm-modal-desc {
+  font-size: 1.08em;
+  color: #444;
+  margin-bottom: 12px;
+}
+.farm-modal-stats {
+  font-size: 1.05em;
+  margin-bottom: 12px;
+}
+.farm-modal-crops {
+  margin-bottom: 12px;
+}
+.farm-modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #888;
+  cursor: pointer;
+  z-index: 10;
+  transition: color 0.2s;
+}
+.modal-close:hover {
+  color: #57b7d9;
+}
+
+/* Enchantment UI */
+.enchant-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+  background: #23272f0a;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+.enchant-btn {
+  background: #4f8cff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.enchant-btn:disabled {
+  background: #ccc;
+  color: #888;
+  cursor: not-allowed;
+}
+
+/* Farm enchant animation */
+.anim-enchant {
+  animation: enchantGlow 0.7s;
+}
+@keyframes enchantGlow {
+  0% { box-shadow: 0 0 0px 0px #7d4afc; filter: drop-shadow(0 0 0px #7d4afc); }
+  40% { box-shadow: 0 0 24px 12px #7d4afc; filter: drop-shadow(0 0 16px #7d4afc); }
+  100% { box-shadow: 0 0 0px 0px #7d4afc; filter: drop-shadow(0 0 0px #7d4afc); }
+}
+
+@media (max-width: 800px) {
+	main {
+		flex-direction: column;
+		gap: 18px;
+	}
+	section {
+		min-width: unset;
+	}
+}
+
+.silkscreen-header {
+  font-family: 'Silkscreen', monospace;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
