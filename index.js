@@ -786,6 +786,10 @@ function animateFarm(typeIdx, action) {
 
 // --- Ensure initial render on page load ---
 window.onload = function() {
+    // Start auto crop generation (selling) interval
+    if (!window.autoSellInterval) {
+        window.autoSellInterval = setInterval(autoSellFarms, game.tickSpeed);
+    }
     render();
     renderShopUI();
     // Restore admin coins button functionality
