@@ -829,7 +829,7 @@ window.onload = function() {
         let message = "Hello! Welome to Season 5 of BTF \n As you have probably already noticed, a lot has changed! Now, I'm not going to go through everything new that has been added, if you want a detailed update log, join our discord server! \n Here are some of the main new things: \n - New farm types \n - Enchantments system \n - Updated UI and graphics \n - A better account system \n A shop to buy potions \n - Bug fixes and performance improvements \n - Ads \n You have probably notied that ads have been added to BTF, and that is to support the development of crazy updates like this. If you don't like ads but love extra perks, you can support BTF by buying BTF+. \n Finally, I, the Cookiemonster, would like to thank the following people for helping make this new season possible: \n oweenBetter, Zhanginator, and gir0fa \n GOOD LUCK AND HAPPY PLAYING!!!!";
         message = message.replace(/\n/g, '<br>');
         modal.innerHTML = `
-            <div style="font-size:2em;margin-bottom:10px;">📢</div>
+            <div style="font-size:2em;margin-bottom:10px;">✨SEASON 5 IS OUT✨</div>
             <div id="update-message-text" style="font-size:1.15em;color:#222;margin-bottom:18px;max-height:40vh;overflow-y:auto;">${message}</div>
             <button id="update-message-close" style="background:#7d4afc;color:#fff;border:none;padding:10px 28px;border-radius:8px;font-size:1.1em;cursor:pointer;box-shadow:0 2px 8px #7d4afc22;">OK</button>
         `;
