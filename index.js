@@ -24,7 +24,9 @@ const buyFarmBtn = document.getElementById('buy-farm');
 const userInfo = document.getElementById('user-info');
 const usernameLabel = document.getElementById('username-label');
 const adminPanel = document.getElementById('admin-panel');
-const adminCoinsBtn = document.getElementById('admin-coins-btn');
+const adminCoinsBtn = document.getElementById
+('admin-coins-btn');
+localStorage.removeItem('btf_hasVisited')
 // --- Crop Rarities ---
 const CROP_RARITIES = [
 	{ name: 'Common', multiplier: 1, class: 'rarity-common' },
@@ -808,6 +810,34 @@ window.onload = function() {
                 document.getElementById('ep').textContent = `Enchantment Points: ${game.ep}`;
             }
         }, 30000);
+    }
+
+    // Show update message for new users (never opened the game before)
+    if (!localStorage.getItem('btf_hasVisited')) {
+        // --- UPDATE MESSAGE POPUP CODE STARTS HERE ---
+        showUpdateMessageBox(); // You can edit the message in showUpdateMessageBox()
+        localStorage.setItem('btf_hasVisited', '1');
+    }
+
+    // Custom update message modal function
+    function showUpdateMessageBox() {
+        const modalBg = document.createElement('div');
+        modalBg.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,20,60,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;';
+        modalBg.id = 'update-message-bg';
+        const modal = document.createElement('div');
+    modal.style = 'background:#fff;border-radius:14px;box-shadow:0 4px 32px #0003;padding:32px 28px;max-width:420px;width:90vw;text-align:center;position:relative;font-family:inherit;max-height:90vh;overflow:hidden;';
+        let message = "Hello! Welome to Season 5 of BTF \n As you have probably already noticed, a lot has changed! Now, I'm not going to go through everything new that has been added, if you want a detailed update log, join our discord server! \n Here are some of the main new things: \n - New farm types \n - Enchantments system \n - Updated UI and graphics \n - A better account system \n A shop to buy potions \n - Bug fixes and performance improvements \n - Ads \n You have probably notied that ads have been added to BTF, and that is to support the development of crazy updates like this. If you don't like ads but love extra perks, you can support BTF by buying BTF+. \n Finally, I, the Cookiemonster, would like to thank the following people for helping make this new season possible: \n oweenBetter, Zhanginator, and gir0fa \n GOOD LUCK AND HAPPY PLAYING!!!!";
+        message = message.replace(/\n/g, '<br>');
+        modal.innerHTML = `
+            <div style="font-size:2em;margin-bottom:10px;">📢</div>
+            <div id="update-message-text" style="font-size:1.15em;color:#222;margin-bottom:18px;max-height:40vh;overflow-y:auto;">${message}</div>
+            <button id="update-message-close" style="background:#7d4afc;color:#fff;border:none;padding:10px 28px;border-radius:8px;font-size:1.1em;cursor:pointer;box-shadow:0 2px 8px #7d4afc22;">OK</button>
+        `;
+        modalBg.appendChild(modal);
+        document.body.appendChild(modalBg);
+        document.getElementById('update-message-close').onclick = function() {
+            document.body.removeChild(modalBg);
+        };
     }
 };
 
