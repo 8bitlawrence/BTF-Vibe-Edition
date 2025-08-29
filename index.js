@@ -26,7 +26,6 @@ const usernameLabel = document.getElementById('username-label');
 const adminPanel = document.getElementById('admin-panel');
 const adminCoinsBtn = document.getElementById
 ('admin-coins-btn');
-localStorage.removeItem('btf_hasVisited')
 // --- Crop Rarities ---
 const CROP_RARITIES = [
 	{ name: 'Common', multiplier: 1, class: 'rarity-common' },
@@ -72,6 +71,7 @@ const FARM_TYPES = [
 	] },
 	{ name: 'Greenhouse', baseCost: 200000, baseYield: 6000, emoji: '🏡', crops: [
 		{ name: 'Tomato', yield: 6000, emoji: '🍅', price: 6, rarity: 1 },
+        { name: 'Potato', yield: 6500, emoji: '🥒', price: 6.5, rarity: 1 },
 		{ name: 'Lettuce', yield: 7000, emoji: '🥬', price: 7, rarity: 1 },
 		{ name: 'Chromatic Flower', yield: 10000, emoji: '🌸', price: 200, rarity: 6 }
 	] },
@@ -722,31 +722,31 @@ function renderEnchantmentsUI() {
         return;
     }
     // Farm selector
-    let farmOptions = game.farms.map((f, i) => `<option value="${i}">${FARM_TYPES[f.type].name} (Owned: ${f.count})</option>`).join('');
-    let selectedIdx = (typeof game.selectedEnchantFarm === 'number' && game.farms[game.selectedEnchantFarm]) ? game.selectedEnchantFarm : 0;
-    game.selectedEnchantFarm = selectedIdx;
-    const farm = game.farms[selectedIdx];
-    ensureFarmEnchantments(farm);
-    // Enchantments UI
-    let enchRows = ENCHANTMENT_TYPES.map(e => {
-      const lvl = farm.enchantments[e.key] || 0;
-      const cost = e.baseCost * (lvl + 1);
-      return `<div class='enchant-row'><b>${e.name}</b> <span style='color:#888;'>Lv.${lvl}</span> <span style='font-size:0.95em;'>${e.desc}</span>
-        <button class='enchant-btn' ${(game.ep < cost) ? 'disabled' : ''} onclick='upgradeEnchantment(${selectedIdx},"${e.key}",${cost})'>Upgrade (${cost} EP)</button></div>`;
-    }).join('');
-    el.innerHTML = `
-      <div style='margin-bottom:12px;'>
-        <label><b>Select Farm:</b> <select id='enchant-farm-select'>${farmOptions}</select></label>
-      </div>
-      <div style='margin-bottom:12px;'>
-        <b>Enchantment Points:</b> <span style='color:#7d4afc;font-weight:bold;'>${game.ep}</span>
-      </div>
-      <div>${enchRows}</div>
-    `;
-    document.getElementById('enchant-farm-select').onchange = function() {
-      game.selectedEnchantFarm = parseInt(this.value);
-      renderEnchantmentsUI();
-    };
+        let selectedIdx = (typeof game.selectedEnchantFarm === 'number' && game.farms[game.selectedEnchantFarm]) ? game.selectedEnchantFarm : 0;
+        let farmOptions = game.farms.map((f, i) => `<option value="${i}"${i === selectedIdx ? ' selected' : ''}>${FARM_TYPES[f.type].name} (Owned: ${f.count})</option>`).join('');
+        game.selectedEnchantFarm = selectedIdx;
+        const farm = game.farms[selectedIdx];
+        ensureFarmEnchantments(farm);
+        // Enchantments UI
+        let enchRows = ENCHANTMENT_TYPES.map(e => {
+            const lvl = farm.enchantments[e.key] || 0;
+            const cost = e.baseCost * (lvl + 1);
+            return `<div class='enchant-row'><b>${e.name}</b> <span style='color:#888;'>Lv.${lvl}</span> <span style='font-size:0.95em;'>${e.desc}</span>
+                <button class='enchant-btn' ${(game.ep < cost) ? 'disabled' : ''} onclick='upgradeEnchantment(${selectedIdx},"${e.key}",${cost})'>Upgrade (${cost} EP)</button></div>`;
+        }).join('');
+        el.innerHTML = `
+            <div style='margin-bottom:12px;'>
+                <label><b>Select Farm:</b> <select id='enchant-farm-select'>${farmOptions}</select></label>
+            </div>
+            <div style='margin-bottom:12px;'>
+                <b>Enchantment Points:</b> <span style='color:#7d4afc;font-weight:bold;'>${game.ep}</span>
+            </div>
+            <div>${enchRows}</div>
+        `;
+        document.getElementById('enchant-farm-select').onchange = function() {
+            game.selectedEnchantFarm = parseInt(this.value);
+            renderEnchantmentsUI();
+        };
 }
 window.upgradeEnchantment = function(farmIdx, key, cost) {
   const farm = game.farms[farmIdx];
@@ -786,6 +786,56 @@ function animateFarm(typeIdx, action) {
 
 // --- Ensure initial render on page load ---
 window.onload = function() {
+    // Start interval for all farms except Suspicious Tower to generate 1 EP every 15 seconds
+    if (!window.farmEpInterval) {
+        window.farmEpInterval = setInterval(() => {
+            let totalEp = 0;
+            for (let i = 0; i < game.farms.length; i++) {
+                const farm = game.farms[i];
+                const farmType = FARM_TYPES[farm.type];
+                if (farmType.name !== 'Suspicious Tower' && farm.count > 0) {
+                    totalEp += farm.count;
+                }
+            }
+            if (totalEp > 0) {
+                game.ep += totalEp;
+                document.getElementById('ep').textContent = `Enchantment Points: ${game.ep}`;
+                console.log(`+${totalEp} Enchantment Point(s) from farms at ${new Date().toLocaleTimeString()}`);
+            }
+        }, 15000);
+    }
+    // Ensure tab event listeners are set after DOM is loaded
+    tabFarms.onclick = showFarmsTab;
+    tabShop.onclick = showShopTab;
+    tabInventory.onclick = showInventoryTab;
+    tabEnchantments.onclick = showEnchantmentsTab;
+    tabSettings.onclick = showSettingsTab;
+    // Auto-load last used account if available
+    const lastUser = localStorage.getItem('btf_lastUser');
+    if (lastUser && localStorage.getItem('btf_save_' + lastUser)) {
+        loadProgress(lastUser);
+        game.username = lastUser;
+        render();
+        showWelcomeBackPopup(lastUser);
+    }
+// Show welcome back popup
+function showWelcomeBackPopup(username) {
+    const modalBg = document.createElement('div');
+    modalBg.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,20,60,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    modalBg.id = 'welcome-back-bg';
+    const modal = document.createElement('div');
+    modal.style = 'background:#fff;border-radius:14px;box-shadow:0 4px 32px #0003;padding:32px 28px;max-width:420px;width:90vw;text-align:center;position:relative;font-family:inherit;max-height:90vh;overflow:hidden;';
+    modal.innerHTML = `
+        <div style="font-size:2em;margin-bottom:10px;">👋</div>
+        <div id="welcome-back-text" style="font-size:1.15em;color:#222;margin-bottom:18px;">Welcome back, <b>${username}</b>!</div>
+        <button id="welcome-back-close" style="background:#7d4afc;color:#fff;border:none;padding:10px 28px;border-radius:8px;font-size:1.1em;cursor:pointer;box-shadow:0 2px 8px #7d4afc22;">OK</button>
+    `;
+    modalBg.appendChild(modal);
+    document.body.appendChild(modalBg);
+    document.getElementById('welcome-back-close').onclick = function() {
+        document.body.removeChild(modalBg);
+    };
+}
     // Start auto crop generation (selling) interval
     if (!window.autoSellInterval) {
         window.autoSellInterval = setInterval(autoSellFarms, game.tickSpeed);
@@ -848,9 +898,8 @@ window.onload = function() {
 // --- Prompt to save progress before leaving if signed in ---
 window.addEventListener('beforeunload', function (e) {
     if (game.username) {
-        // Show a confirmation dialog
-        const confirmationMessage = 'You are signed in. Did you save your progress? Make sure to save before leaving!';
-        (e || window.event).returnValue = confirmationMessage;
-        return confirmationMessage;
+        // Auto-save progress and username
+        saveProgress(game.username);
+        localStorage.setItem('btf_lastUser', game.username);
     }
 });
